@@ -44,10 +44,16 @@ import { PlacementArray } from 'positioning';
       </div>
       <div class="cal-events" *ngIf="day.events.length > 0">
         <div
-          class="cal-event"
+          class="cal-event-wrap"
           *ngFor="let event of day.events; trackBy: trackByEventId"
-          [ngStyle]="{ backgroundColor: event.color?.primary }"
-          [ngClass]="event?.cssClass"
+          style="line-height: 16px;"
+          mwlDraggable
+          [class.cal-draggable]="event.draggable"
+          dragActiveClass="cal-drag-active"
+          [dropData]="{ event: event, draggedFrom: day }"
+          [dragAxis]="{ x: event.draggable, y: event.draggable }"
+          [validateDrag]="validateDrag"
+          [touchStartLongPress]="{ delay: 300, delta: 30 }"
           (mouseenter)="highlightDay.emit({ event: event })"
           (mouseleave)="unhighlightDay.emit({ event: event })"
           [mwlCalendarTooltip]="
@@ -58,16 +64,18 @@ import { PlacementArray } from 'positioning';
           [tooltipTemplate]="tooltipTemplate"
           [tooltipAppendToBody]="tooltipAppendToBody"
           [tooltipDelay]="tooltipDelay"
-          mwlDraggable
-          [class.cal-draggable]="event.draggable"
-          dragActiveClass="cal-drag-active"
-          [dropData]="{ event: event, draggedFrom: day }"
-          [dragAxis]="{ x: event.draggable, y: event.draggable }"
-          [validateDrag]="validateDrag"
-          [touchStartLongPress]="{ delay: 300, delta: 30 }"
-          (mwlClick)="eventClicked.emit({ event: event, sourceEvent: $event })"
-          [attr.aria-hidden]="{} | calendarA11y: 'hideMonthCellEvents'"
-        ></div>
+        >
+          <div
+            class="cal-event"
+            [ngStyle]="{ backgroundColor: event.color?.primary }"
+            [ngClass]="event?.cssClass"
+            (mwlClick)="
+              eventClicked.emit({ event: event, sourceEvent: $event })
+            "
+            [attr.aria-hidden]="{} | calendarA11y: 'hideMonthCellEvents'"
+          ></div>
+          {{ event.title }}
+        </div>
       </div>
     </ng-template>
     <ng-template
@@ -89,6 +97,7 @@ import { PlacementArray } from 'positioning';
     >
     </ng-template>
   `,
+  // eslint-disable-next-line @angular-eslint/no-host-metadata-property
   host: {
     class: 'cal-cell cal-day-cell',
     '[class.cal-past]': 'day.isPast',

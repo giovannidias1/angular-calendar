@@ -35,6 +35,14 @@ $cal-month-view-vars: map-merge($cal-vars, $cal-month-view-vars);
       color: map-get($theme, white);
     }
 
+    .cal-event-wrap {
+      font-size: 12px;
+      max-width: 138px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow-x: hidden;
+    }
+
     .cal-event {
       background-color: map-get($theme, event-color-primary);
       border-color: map-get($theme, event-color-secondary);
@@ -150,6 +158,7 @@ $cal-month-view-vars: map-merge($cal-vars, $cal-month-view-vars);
     line-height: 10px;
     display: flex;
     flex-wrap: wrap;
+    gap: 8px;
   }
 
   .cal-event {
