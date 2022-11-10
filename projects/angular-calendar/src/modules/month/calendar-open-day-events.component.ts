@@ -4,6 +4,7 @@ import {
   Output,
   EventEmitter,
   TemplateRef,
+  OnInit,
 } from '@angular/core';
 import {
   trigger,
@@ -56,6 +57,9 @@ export const collapseAnimation: AnimationTriggerMetadata = trigger('collapse', [
         *ngIf="isOpen"
         role="application"
       >
+      <div class="cal-open-day-events-close">
+        <i class="fa fa-times"></i>
+      </div>
         <span
           tabindex="-1"
           role="alert"

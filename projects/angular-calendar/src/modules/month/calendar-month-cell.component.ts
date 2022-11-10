@@ -4,6 +4,7 @@ import {
   Output,
   EventEmitter,
   TemplateRef,
+  OnInit,
 } from '@angular/core';
 import { MonthViewDay, CalendarEvent } from 'calendar-utils';
 import { isWithinThreshold, trackByEventId } from '../common/util';
@@ -76,6 +77,21 @@ import { PlacementArray } from 'positioning';
           ></div>
           {{ event.title }}
         </div>
+        <mwl-calendar-open-day-events
+            [locale]="locale"
+            [isOpen]="day === openDay"
+            [events]="openDay?.events"
+            [date]="openDay?.date"
+            [customTemplate]="openDayEventsTemplate"
+            [eventTitleTemplate]="eventTitleTemplate"
+            [eventActionsTemplate]="eventActionsTemplate"
+            (eventClicked)="
+              eventClicked.emit({
+                event: $event.event,
+                sourceEvent: $event.sourceEvent
+              })"
+          >
+        </mwl-calendar-open-day-events>
       </div>
     </ng-template>
     <ng-template
@@ -128,9 +144,25 @@ export class CalendarMonthCellComponent {
 
   @Input() tooltipDelay: number | null;
 
+    /**
+   * A custom template to use for the slide down box of events for the active day
+   */
+  @Input() openDayEventsTemplate: TemplateRef<any>;
+
+  /**
+   * A custom template to use for event titles
+   */
+  @Input() eventTitleTemplate: TemplateRef<any>;
+
+  /**
+   * A custom template to use for event actions
+   */
+  @Input() eventActionsTemplate: TemplateRef<any>;
+
   @Output() highlightDay: EventEmitter<any> = new EventEmitter();
 
   @Output() unhighlightDay: EventEmitter<any> = new EventEmitter();
+
 
   @Output() eventClicked = new EventEmitter<{
     event: CalendarEvent;
@@ -140,4 +172,5 @@ export class CalendarMonthCellComponent {
   trackByEventId = trackByEventId;
 
   validateDrag = isWithinThreshold;
+
 }

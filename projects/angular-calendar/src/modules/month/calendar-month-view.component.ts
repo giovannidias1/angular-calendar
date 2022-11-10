@@ -10,6 +10,7 @@ import {
   LOCALE_ID,
   Inject,
   TemplateRef,
+  HostListener,
 } from '@angular/core';
 import {
   CalendarEvent,
@@ -84,7 +85,7 @@ export interface CalendarMonthViewEventTimesChangedEvent<
               [tooltipDelay]="tooltipDelay"
               [customTemplate]="cellTemplate"
               [ngStyle]="{ backgroundColor: day.backgroundColor }"
-              (mwlClick)="dayClicked.emit({ day: day, sourceEvent: $event })"
+              (mwlClick)="dayClicked.emit({ day: day, sourceEvent: $event }); showEvent($event)"
               [clickListenerDisabled]="dayClicked.observers.length === 0"
               (mwlKeydownEnter)="
                 dayClicked.emit({ day: day, sourceEvent: $event })
@@ -107,34 +108,13 @@ export interface CalendarMonthViewEventTimesChangedEvent<
                 })
               "
               [attr.tabindex]="{} | calendarA11y: 'monthCellTabIndex'"
+              [customTemplate]="openDayEventsTemplate"
+              [eventTitleTemplate]="eventTitleTemplate"
+              [eventActionsTemplate]="eventActionsTemplate"
             >
             </mwl-calendar-month-cell>
           </div>
-          <mwl-calendar-open-day-events
-            [locale]="locale"
-            [isOpen]="openRowIndex === rowIndex"
-            [events]="openDay?.events"
-            [date]="openDay?.date"
-            [customTemplate]="openDayEventsTemplate"
-            [eventTitleTemplate]="eventTitleTemplate"
-            [eventActionsTemplate]="eventActionsTemplate"
-            (eventClicked)="
-              eventClicked.emit({
-                event: $event.event,
-                sourceEvent: $event.sourceEvent
-              })
-            "
-            mwlDroppable
-            dragOverClass="cal-drag-over"
-            (drop)="
-              eventDropped(
-                openDay,
-                $event.dropData.event,
-                $event.dropData.draggedFrom
-              )
-            "
-          >
-          </mwl-calendar-open-day-events>
+
         </div>
       </div>
     </div>
@@ -309,6 +289,13 @@ export class CalendarMonthViewComponent
   /**
    * @hidden
    */
+
+   eventTeste: any;
+
+   /**
+    * @hidden
+    */
+
   constructor(
     protected cdr: ChangeDetectorRef,
     protected utils: CalendarUtils,
@@ -336,6 +323,7 @@ export class CalendarMonthViewComponent
    * @hidden
    */
   ngOnInit(): void {
+    console.log(this.eventTeste)
     if (this.refresh) {
       this.refreshSubscription = this.refresh.subscribe(() => {
         this.refreshAll();
@@ -404,6 +392,13 @@ export class CalendarMonthViewComponent
         delete day.backgroundColor;
       }
     });
+  }
+
+  /**
+   * @hidden
+   */
+  showEvent(event) {
+    return event
   }
 
   /**
