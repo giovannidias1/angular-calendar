@@ -77,6 +77,7 @@ export const collapseAnimation: AnimationTriggerMetadata = trigger('collapse', [
         ></span>
         <div
           *ngFor="let event of events; trackBy: trackByEventId"
+          class="cal-open-day-events-grid"
           [ngClass]="event?.cssClass"
           mwlDraggable
           [class.cal-draggable]="event.draggable"

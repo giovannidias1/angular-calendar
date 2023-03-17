@@ -75,7 +75,7 @@ import { PlacementArray } from 'positioning';
             "
             [attr.aria-hidden]="{} | calendarA11y: 'hideMonthCellEvents'"
           ></div>
-          {{ event.title }}
+          <span class="cal-event-text">{{ event.title }}</span>
         </div>
         <mwl-calendar-open-day-events
             [locale]="locale"
