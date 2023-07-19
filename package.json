@@ -1,6 +1,6 @@
 {
   "name": "angular-calendar-guiddle",
-  "version": "0.31.2",
+  "version": "0.31.3",
   "description": "A calendar component for angular 15.0+ that can display events on a month, week or day view",
   "funding": {
     "url": "https://github.com/sponsors/mattlewis92"
